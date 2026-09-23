@@ -59,3 +59,38 @@ resource "aws_route_table_association" "public" {
     subnet_id      = aws_subnet.public.id
     route_table_id = aws_route_table.public.id
 }
+
+############### Security ######################
+resource "aws_security_group" "web" {
+    name = "monitored-webserver-sg"
+    description = "Allow HTTP and SSH traffic"
+    vpc_id = aws_vpc.main.id
+
+    ingress {
+        description = "Allow HTTP"
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        description = "Allow SSH"
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        description = "Allow all outbound traffic"
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    tags = {
+        Name = "monitored-webserver-sg"
+    }
+}
