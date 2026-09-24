@@ -16,7 +16,7 @@ provider "aws" {
     region = "us-east-1"
 }
 
-##################### Network resources ######################
+#################### Network resources ####################
 resource "aws_vpc" "main" {
     cidr_block = "10.0.0.0/16"
 
@@ -65,7 +65,7 @@ resource "aws_route_table_association" "public" {
     route_table_id = aws_route_table.public.id
 }
 
-############### Security ######################
+#################### Security ####################
 resource "aws_security_group" "web" {
     name = "monitored-webserver-sg"
     description = "Allow HTTP and SSH traffic"
@@ -100,12 +100,21 @@ resource "aws_security_group" "web" {
     }
 }
 
-########### Compute resources ######################
+#################### Compute resources ####################
 resource "aws_instance" "web" {
     ami = "ami-0c02fb55956c7d316" # Amazon Linux 2 AMI (HVM), SSD Volume Type
     instance_type = "t3.micro"
     subnet_id = aws_subnet.public.id
     vpc_security_group_ids = [aws_security_group.web.id]
+    user_data_replace_on_change = true
+
+    user_data = <<-EOF
+        #!/bin/bash
+        yum update -y
+        amazon-linux-extras install nginx1 -y
+        systemctl start nginx
+        systemctl enable nginx
+    EOF
 
     tags = {
         Name = "monitored-webserver-instance"
