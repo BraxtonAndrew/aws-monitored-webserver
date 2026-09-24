@@ -17,3 +17,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::289531348161:role/github-actions-terraform
+          aws-region: us-east-1
