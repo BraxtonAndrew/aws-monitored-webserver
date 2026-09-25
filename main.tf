@@ -120,3 +120,14 @@ resource "aws_instance" "web" {
         Name = "monitored-webserver-instance"
     }
 }
+
+#################### Monitoring ####################
+resource "aws_sns_topic" "alerts" {
+    name = "monitored-webserver-alerts"
+}
+
+resource "aws_sns_topic_subscription" "email" {
+    topic_arn = aws_sns_topic.alerts.arn
+    protocol  = "email"
+    endpoint  = var.alert_email
+}
