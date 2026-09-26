@@ -35,11 +35,13 @@ Branch protection on `main` requires a pull request and a passing plan before me
 
 ## Screenshots
 
-- ![nginx welcome page](images/nginx.png) served from the deployed instance
-- ![CloudWatch alarm graph](images/alarm-graph.png) showing a real CPU spike crossing the 70% threshold
-- The resulting ![alarm email](images/alarm-email.png)
+- Nginx welcome page served from the deployed instance
+- ![nginx welcome page](images/nginx.png)
+- CloudWatch alarm graph showing a real CPU spike crossing the 70% threshold
+- ![CloudWatch alarm graph](images/alarm-graph.png) 
+- The resulting alarm email
+- ![alarm email](images/alarm-email.png)
 
-*(Add these images to the repo and link them here.)*
 
 ## Things I learned
 
