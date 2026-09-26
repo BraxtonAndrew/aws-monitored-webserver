@@ -121,7 +121,7 @@ resource "aws_instance" "web" {
     }
 }
 
-#################### Monitoring ####################
+#################### Notification ####################
 resource "aws_sns_topic" "alerts" {
     name = "monitored-webserver-alerts"
 }
@@ -130,4 +130,22 @@ resource "aws_sns_topic_subscription" "email" {
     topic_arn = aws_sns_topic.alerts.arn
     protocol  = "email"
     endpoint  = var.alert_email
+}
+
+#################### Monitoring ####################
+resource "aws_cloudwatch_metric_alarm" "high_cpu" {
+    alarm_name = "monitored-webserver-high-cpu"
+    comparison_operator = "GreaterThanThreshold"
+    evaluation_periods = 2
+    metric_name = "CPUUtilization"
+    namespace = "AWS/EC2"
+    period = 300
+    statistic = "Average"
+    threshold = 70
+    alarm_description = "Triggers when average CPU utilization exceeds 70% for 10 minutes"
+    alarm_actions = [aws_sns_topic.alerts.arn]
+
+    dimensions = {
+        InstanceId = aws_instance.web.id
+    }
 }
