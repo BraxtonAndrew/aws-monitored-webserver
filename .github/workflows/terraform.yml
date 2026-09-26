@@ -33,7 +33,11 @@ jobs:
       - name: Terraform Plan
         if: github.event_name == 'pull_request'
         run: terraform plan
+        env:
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve
+        env:
+          TF_VAR_alert_email: ${{ secrets.ALERT_EMAIL }}
